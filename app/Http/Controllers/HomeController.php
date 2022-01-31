@@ -29,9 +29,9 @@ class HomeController extends Controller
 
             $total_avg_viewers   = $ts->getAVGViews();
             $streamsByHour       = $ts->getStreamersByStartHour();
-            $users_followed_data = []; //$ts->getFollows($this->getValidatedAccessToken());
+            $users_followed_data = $ts->getFollows($this->getValidatedAccessToken());
             //sleep(3);
-            $users_1000_shared = []; //$ts->top1000tagsShared($this->getValidatedAccessToken());
+            $users_1000_shared = $ts->top1000tagsShared($this->getValidatedAccessToken());
             $access            = true;
         }
         else
