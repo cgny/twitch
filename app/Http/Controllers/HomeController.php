@@ -14,11 +14,9 @@ class HomeController extends Controller
         $this->validateToken();
         if ($this->getValidatedAccessToken())
         {
-
             $follows = (array) json_decode(auth()->user()->twitch_follows);
 
-            $ts = new TwitchStreams();
-
+            $ts           = new TwitchStreams();
             $game_streams = $ts->getViewersGroupedByGame(1000);
             foreach ($game_streams as $game_stream)
             {
@@ -32,12 +30,13 @@ class HomeController extends Controller
 
             $total_avg_viewers   = $ts->getAVGViews();
             $streamsByHour       = $ts->getStreamersByStartHour();
-            $users_followed_data = $ts->formatFollows($this->getValidatedAccessToken());
+            $users_followed_data = $ts->getFollows($this->getValidatedAccessToken());
+            $users_1000_shared   = $ts->top1000tagsShared($this->getValidatedAccessToken());
             $access              = true;
         }
         else
         {
-            $streamsByHour     = $game_streams = $top_100 = $users_followed_data = [];
+            $streamsByHour     = $game_streams = $top_100 = $users_followed_data = $users_1000_shared = [];
             $total_avg_viewers = 0;
         }
 
@@ -45,18 +44,19 @@ class HomeController extends Controller
             'total_avg_viewers'  => $total_avg_viewers,
             'top_1000_keys'      => [ 'ts_channel_name', 'ts_game_id', 'ts_game_name', 'following', 'total_views' ],
             'top_1000_data'      => $game_streams,
-            'top_100_keys'       => [ 'ts_game_id', 'ts_game_name', 'total_views' ],
+            'top_100_keys'       => [ 'ts_channel_name', 'ts_game_id', 'ts_game_name', 'total_views' ],
             'top_100_data'       => $top_100,
             'streams_start_keys' => [ 'total_streams', 'start_date' ],
             'streams_start_data' => $streamsByHour,
             'user_follow_data'   => $users_followed_data,
+            'users_1000_shared'  => $users_1000_shared,
             'access'             => $access
         ];
 
         return view('dashboard', $data);
     }
 
-    function dashboard(Request $request)
+    function dashboard( Request $request )
     {
         return $this->index($request);
     }

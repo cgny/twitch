@@ -31,6 +31,7 @@
             </tbody>
             <tfoot>
             <tr>
+                <th>#</th>
                 @foreach($keys as $key)
                     <th>{{ \App\Models\AbstractModel::filterKeys($key) }}</th>
                 @endforeach

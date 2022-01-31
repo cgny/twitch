@@ -22,6 +22,7 @@ class CreateTableTwitchStreams extends Migration
             $table->string('ts_broadcast_login',200); //username
             $table->bigInteger('ts_game_id');
             $table->text('ts_game_name');
+            $table->longText('ts_tags');
             $table->bigInteger('ts_number_of_viewers')->nullable();
             $table->dateTimeTz('ts_start_date')->comment('UTC');
             $table->timestamps();

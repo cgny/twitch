@@ -75,8 +75,8 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($user_follow_data as $user_follow_datum)
-                                    <tr>
+                                @foreach($user_follow_data as $tag_ig => $user_follow_datum)
+                                    <tr data-tag-id="{{ $tag_ig }}">
                                         <td>{{ $user_follow_datum['title'] }} </td>
                                         <td>{{ $user_follow_datum['viewers'] }} </td>
                                         <td>{{ $user_follow_datum['needed_1000'] }} </td>
@@ -92,7 +92,6 @@
                                         <td>
 
                                            @foreach($user_follow_datum['shared_tags'] as $tag)
-
                                                 {{ $tag->localization_descriptions->{'en-us'} }}<br>
                                            @endforeach
                                         </td>
@@ -111,6 +110,62 @@
                             </table>
                         </div>
                     </div>
+
+                        <a name="1000_shared_tags" />
+                        <div class="col-12 card">
+                            <div class="col-form-label-lg">
+                                Top 1000 Shared Tags
+                            </div>
+                            <div class="card-body">
+                                <table id="followed_tags" class="table table-striped table-bordered" style="width:100%">
+                                    <thead>
+                                    <tr>
+                                        <th>Title</th>
+                                        <th>Viewers</th>
+                                        <th>Needed for 1000</th>
+                                        <th>Tags</th>
+                                        <th>Shared Tags</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    @foreach($users_1000_shared as $tag_ig => $user_follow_datum)
+                                        <tr data-tag-id="{{ $tag_ig }}">
+                                            <td>{{ $user_follow_datum['title'] }} </td>
+                                            <td>{{ $user_follow_datum['viewers'] }} </td>
+                                            <td>{{ $user_follow_datum['needed_1000'] }} </td>
+                                            <td>
+
+                                                @foreach($user_follow_datum['tags'] as $tags)
+
+                                                    @foreach($tags as $tag)
+                                                        {{ $tag->tag_id }} |
+                                                        {{ $tag->localization_descriptions->{'en-us'} }}<br>
+                                                    @endforeach
+                                                @endforeach
+                                            </td>
+                                            <td>
+
+                                                @foreach($user_follow_datum['shared_tags'] as $tag)
+
+                                                    {{ $tag->localization_descriptions->{'en-us'} }}<br>
+                                                @endforeach
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                    </tbody>
+                                    <tfoot>
+                                    <tr>
+                                        <th>Title</th>
+                                        <th>Viewers</th>
+                                        <th>Needed for 1000</th>
+                                        <th>Tags</th>
+                                        <th>Shared Tags</th>
+                                    </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+
                     @else
                         <div style="float:left;text-align: center; max-width:100%" class="col-12">
                             <img src="{{ asset('img/2560px-Twitch_logo.svg.png') }}" title="Twitch Logo" style="max-width:400px;margin-left: auto;margin-right: auto;display: block;" />
