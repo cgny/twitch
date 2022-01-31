@@ -23,8 +23,7 @@ class HomeController extends Controller
             \App\Models\AbstractModel::flattenArray($follows, $follows_flatten);
 
             $game_streams = $ts->getViewersGroupedByGame(1000);
-            $game_streams = $ts->checkUserFollows($game_streams,$follows_flatten);
-
+            $game_streams = $ts->checkUserFollows($game_streams,$follows_flatten,$tags);
 
             $top_100 = $game_streams->slice(0, 99);
 

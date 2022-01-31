@@ -230,7 +230,7 @@ class TwitchStreams extends AbstractModel
             );
     }
 
-    function checkUserFollows($game_streams,$follows_flatten)
+    function checkUserFollows($game_streams,$follows_flatten,$tags)
     {
         foreach ($game_streams as $game_stream)
         {
