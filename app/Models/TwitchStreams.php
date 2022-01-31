@@ -230,6 +230,28 @@ class TwitchStreams extends AbstractModel
             );
     }
 
+    function checkUserFollows($game_streams,$follows_flatten)
+    {
+        foreach ($game_streams as $game_stream)
+        {
+            $game_stream->following = "<button class='btn btn-warning' data-id='" . $game_stream->ts_channel_id . "'>No</button>";
+            if (in_array($game_stream->ts_channel_id, $follows_flatten))
+            {
+                $game_stream->following = "<button class='btn btn-success' data-id='" . $game_stream->ts_channel_id . "'>Yes</button>";
+            }
+
+            $steam_tags              = (array) json_decode($game_stream->ts_tags);
+            $shared                  = array_intersect($steam_tags, $tags);
+            $game_stream->share_tags = "<button class='btn btn-warning' data-id='" . $game_stream->ts_channel_id . "'>No</button>";
+            if (count($shared) > 0)
+            {
+                $style                   = (in_array($game_stream->ts_channel_id, $follows_flatten)) ? 'success' : 'primary';
+                $game_stream->share_tags = "<button class='btn btn-$style' data-id='" . $game_stream->ts_channel_id . "'>Yes</button>";
+            }
+        }
+        return $game_streams;
+    }
+
     function getUserFollows( $id, $twitch_id, $access_token )
     {
 

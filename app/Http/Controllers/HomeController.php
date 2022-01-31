@@ -23,30 +23,16 @@ class HomeController extends Controller
             \App\Models\AbstractModel::flattenArray($follows, $follows_flatten);
 
             $game_streams = $ts->getViewersGroupedByGame(1000);
-            foreach ($game_streams as $game_stream)
-            {
-                $game_stream->following = "<button class='btn btn-warning' data-id='" . $game_stream->ts_channel_id . "'>No</button>";
-                if (in_array($game_stream->ts_channel_id, $follows_flatten))
-                {
-                    $game_stream->following = "<button class='btn btn-success' data-id='" . $game_stream->ts_channel_id . "'>Yes</button>";
-                }
+            $game_streams = $ts->checkUserFollows($game_streams,$follows_flatten);
 
-                $steam_tags              = (array) json_decode($game_stream->ts_tags);
-                $shared                  = array_intersect($steam_tags, $tags);
-                $game_stream->share_tags = "<button class='btn btn-warning' data-id='" . $game_stream->ts_channel_id . "'>No</button>";
-                if (count($shared) > 0)
-                {
-                    $style                   = (in_array($game_stream->ts_channel_id, $follows_flatten)) ? 'success' : 'primary';
-                    $game_stream->share_tags = "<button class='btn btn-$style' data-id='" . $game_stream->ts_channel_id . "'>Yes</button>";
-                }
-            }
+
             $top_100 = $game_streams->slice(0, 99);
 
             $total_avg_viewers   = $ts->getAVGViews();
             $streamsByHour       = $ts->getStreamersByStartHour();
-            $users_followed_data = $ts->getFollows($this->getValidatedAccessToken());
+            $users_followed_data = []; //$ts->getFollows($this->getValidatedAccessToken());
             //sleep(3);
-            $users_1000_shared = $ts->top1000tagsShared($this->getValidatedAccessToken());
+            $users_1000_shared = []; //$ts->top1000tagsShared($this->getValidatedAccessToken());
             $access            = true;
         }
         else
