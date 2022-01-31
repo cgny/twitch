@@ -13,15 +13,8 @@ use Illuminate\Support\Facades\DB;
 class TwitchController extends Controller
 {
 
-    function streams()
-    {
-        $id = auth()->user()->id;
-        $twitch = new TwitchStreams();
-
-        echo "<pre>";
-
-        $follows = $twitch->formatFollows( $this->getValidatedAccessToken() );
-
-    }
+    /**
+     * primarily used for testing
+     */
 
 }

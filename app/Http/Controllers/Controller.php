@@ -32,12 +32,8 @@ class Controller extends BaseController
             $token  = $twitch->checkRefreshToken($id);
             if ($token === true)
             {
-                $links[0]['route'] = 'twitch.stats';
-                $links[0]['text']  = 'View Stats';
-                $links[1]['route'] = 'twitch.streams';
-                $links[1]['text']  = 'View Streams';
-                $links[2]['route'] = 'twitch.load_streams';
-                $links[2]['text']  = 'Load Streams';
+                $links[0]['route'] = 'home.index';
+                $links[0]['text']  = 'Twitch Data';
             }
             else
             {

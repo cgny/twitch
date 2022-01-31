@@ -19,11 +19,10 @@ Route::get('/', function () {
 
 Route::group([ 'middleware' => ['auth'], 'namespace' => 'App\Http\Controllers' ], function ()
 {
-    Route::get('/dashboard', function () {
-
-        Route::get('/', 'HomeController@index')->name('home.index');
-    })->name('dashboard');
-
+    Route::prefix('dashboard')->group(function ()
+    {
+        Route::get('/', 'HomeController@dashboard')->name('dashboard');
+    });
 
     Route::prefix('home')->group(function ()
     {

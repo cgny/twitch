@@ -8,11 +8,11 @@ use App\Models\TwitchStreams;
 
 class HomeController extends Controller
 {
-    function index()
+    function index( Request $request )
     {
-
+        $access = false;
         $this->validateToken();
-        if($this->getValidatedAccessToken())
+        if ($this->getValidatedAccessToken())
         {
 
             $follows = (array) json_decode(auth()->user()->twitch_follows);
@@ -33,10 +33,11 @@ class HomeController extends Controller
             $total_avg_viewers   = $ts->getAVGViews();
             $streamsByHour       = $ts->getStreamersByStartHour();
             $users_followed_data = $ts->formatFollows($this->getValidatedAccessToken());
+            $access              = true;
         }
         else
         {
-            $streamsByHour = $game_streams = $top_100 = $users_followed_data = [];
+            $streamsByHour     = $game_streams = $top_100 = $users_followed_data = [];
             $total_avg_viewers = 0;
         }
 
@@ -48,9 +49,15 @@ class HomeController extends Controller
             'top_100_data'       => $top_100,
             'streams_start_keys' => [ 'total_streams', 'start_date' ],
             'streams_start_data' => $streamsByHour,
-            'user_follow_data'   => $users_followed_data
+            'user_follow_data'   => $users_followed_data,
+            'access'             => $access
         ];
 
         return view('dashboard', $data);
+    }
+
+    function dashboard(Request $request)
+    {
+        return $this->index($request);
     }
 }
