@@ -59,7 +59,7 @@ class Twitch extends AbstractModel
             );
     }
 
-    function getTokens($user_id='')
+    function getTokens($user_id='', $limit = false)
     {
         $where = [ 'oauth_access_tokens.revoked' => 0 ];
         if ($user_id)
@@ -67,7 +67,7 @@ class Twitch extends AbstractModel
             $where['oauth_access_tokens.user_id'] = $user_id;
         }
 
-        return DB::table('oauth_access_tokens')
+        $t = DB::table('oauth_access_tokens')
             ->selectRaw('users.id as user_id, users.twitch_id, oauth_access_tokens.*,
             oauth_refresh_tokens.*,
             oauth_access_tokens.id as access_token_id,
@@ -80,8 +80,15 @@ class Twitch extends AbstractModel
             ->where($where)
             ->join('oauth_refresh_tokens', 'oauth_access_tokens.id', '=', 'oauth_refresh_tokens.access_token_id')
             ->join('users', 'users.id', '=', 'oauth_access_tokens.user_id')
-            ->orderBy('oauth_access_tokens.created_at', 'desc')
-            ->get();
+            ->orderBy('oauth_access_tokens.created_at', 'desc');
+
+        if($limit)
+        {
+            $t->limit($limit);
+            return $t->first();
+        }
+
+        return $t->get();
 
     }
 

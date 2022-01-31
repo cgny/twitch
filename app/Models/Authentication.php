@@ -36,7 +36,7 @@ class Authentication extends AbstractModel
         if (isset($twitchAPI->getAllParams()['user_id']))
         {
             $twitch_user_id = $twitchAPI->getAllParams()['user_id'];
-            echo "ID $twitch_user_id ";
+
             $id             = auth()->user()->id;
             User::where([ 'id' => $id ])
                 ->update(

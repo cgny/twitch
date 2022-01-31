@@ -172,7 +172,7 @@ class TwitchStreams extends AbstractModel
                         }
                     }
                     $x++;
-                } while ($streams > 0);
+                } while ($streams > 0 && $counter < 10000);
             }
         }
     }

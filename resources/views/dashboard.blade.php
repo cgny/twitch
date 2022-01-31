@@ -21,18 +21,18 @@
                     </div>
 
                     <!-- Top 1000 Streams -->
-                    @include('components.table',['title' => 'Top 1000  Streams', 'keys' => $top_1000_keys, 'dataSet' => $top_1000_data])
+                    @include('components.table',['title' => 'Top 1000  Streams', 'keys' => $top_1000_keys, 'dataSet' => $top_1000_data, 'chart_id' => 'top_1000'])
 
-                    @include('components.table',['title' => 'Top 100  Streams', 'keys' => $top_100_keys, 'dataSet' => $top_100_data])
+                    @include('components.table',['title' => 'Top 100  Streams', 'keys' => $top_100_keys, 'dataSet' => $top_100_data, 'chart_id' => 'top_100'])
 
-                    @include('components.table',['title' => 'Streams By Start Hour', 'keys' => $streams_start_keys, 'dataSet' => $streams_start_data])
+                    @include('components.table',['title' => 'Streams By Start Hour', 'keys' => $streams_start_keys, 'dataSet' => $streams_start_data, 'chart_id' => 'streams_by_hr'])
 
 
 
 
                         <div class="col-12 card">
                             <div class="col-form-label-lg">
-                                {{ $title }}
+                                Follow Streams with Tags
                             </div>
                             <div class="card-body">
                                 <table id="example" class="table table-striped table-bordered" style="width:100%">
@@ -48,29 +48,40 @@
                                     <tbody>
                                     @foreach($user_follow_data as $user_follow_datum)
                                         <tr>
-                                            <td>{{ $user_follow_datum->title }} </td>
-                                            <td>{{ $user_follow_datum->viewers }} </td>
-                                            <td>{{ $user_follow_datum->needed_1000 }} </td>
+                                            <td>{{ $user_follow_datum['title'] }} </td>
+                                            <td>{{ $user_follow_datum['viewers'] }} </td>
+                                            <td>{{ $user_follow_datum['needed_1000'] }} </td>
                                             <td>
 
-                                                {{ $user_follow_datum->needed_1000 }}
+                                               @foreach($user_follow_datum['tags'] as $tags)
 
+                                                  @foreach($tags as $tag)
+                                                        {{ $tag->localization_descriptions->{'en-us'} }}<br>
+                                                    @endforeach
+                                               @endforeach
+                                            </td>
+                                            <td>
+
+                                               @foreach($user_follow_datum['shared_tags'] as $tag)
+
+                                                    {{ $tag->localization_descriptions->{'en-us'} }}<br>
+                                               @endforeach
                                             </td>
                                         </tr>
                                     @endforeach
                                     </tbody>
                                     <tfoot>
                                     <tr>
-                                        @foreach($keys as $key)
-                                            <th>{{ $t->filterKeys($key) }}</th>
-                                        @endforeach
+                                        <th>Title</th>
+                                        <th>Viewers</th>
+                                        <th>Needed for 1000</th>
+                                        <th>Tags</th>
+                                        <th>Shared Tags</th>
                                     </tr>
                                     </tfoot>
                                 </table>
                             </div>
                         </div>
-
-                    @endforeach
 
                 </div>
             </div>

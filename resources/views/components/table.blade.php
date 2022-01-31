@@ -10,7 +10,7 @@
         {{ $title }}
     </div>
     <div class="card-body">
-        <table id="example" class="table table-striped table-bordered" style="width:100%">
+        <table id="{{ $chart_id ?? "table" }}" class="table table-striped table-bordered" style="width:100%">
             <thead>
             <tr>
                 @foreach($keys as $key)

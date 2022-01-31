@@ -25,6 +25,16 @@ class Kernel extends ConsoleKernel
                 // The task failed...
                 Log::error('FAILED: command:check_tokens_every5 ');
             });
+
+        $schedule->command('command:load_streams_every15')->everyFifteenMinutes()
+            ->onSuccess(function () use (&$log) {
+            // The task succeeded...
+                Log::info('SUCCESS: command:load_streams_every15 ');
+            })
+            ->onFailure(function () use (&$log) {
+                // The task failed...
+                Log::error('FAILED: command:load_streams_every15 ');
+            });
     }
 
     /**

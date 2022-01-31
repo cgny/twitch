@@ -51,6 +51,6 @@ class OAuthController extends Controller
         $auth = new Authentication();
         $auth->requestAuthentication($id,$scope,$code);
 
-        //return redirect(route('dashboard'));
+        return redirect(route('dashboard'));
     }
 }

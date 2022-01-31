@@ -21,7 +21,7 @@ Route::group([ 'middleware' => ['auth'], 'namespace' => 'App\Http\Controllers' ]
 {
     Route::get('/dashboard', function () {
 
-        return view('dashboard');
+        Route::get('/', 'HomeController@index')->name('home.index');
     })->name('dashboard');
 
 

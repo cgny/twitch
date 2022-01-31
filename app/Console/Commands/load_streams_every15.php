@@ -2,8 +2,10 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Twitch;
 use Illuminate\Console\Command;
 use App\Models\TwitchStreams;
+use Illuminate\Support\Facades\Log;
 
 class load_streams_every15 extends Command
 {
@@ -38,7 +40,17 @@ class load_streams_every15 extends Command
      */
     public function handle()
     {
-        $twitch = new TwitchStreams();
-        $twitch->loadStreams();
+        $twich = new Twitch();
+        $token = $twich->getTokens("",1);
+
+        if(isset($token->access_token))
+        {
+            $twitchSteams = new TwitchStreams();
+            $twitchSteams->loadStreams($token->access_token);
+        }
+        else
+        {
+            Log::error('No active token');
+        }
     }
 }
