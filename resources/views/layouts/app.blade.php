@@ -12,10 +12,14 @@
 
         <!-- Styles -->
         <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/bootstrap.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/datatables.bootstrap.min.css') }}">
         @stack('styles')
 
         <!-- Scripts -->
         <script src="{{ asset('js/app.js') }}" defer></script>
+        <script src="{{ asset('js/jquery.js') }}" ></script>
+        <script src="{{ asset('js/datatables.min.js') }}" ></script>
         @stack('scripts')
     </head>
     <body class="font-sans antialiased">
@@ -35,5 +39,4 @@
             </main>
         </div>
     </body>
-    @stack('scripts')
 </html>

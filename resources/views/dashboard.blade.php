@@ -35,7 +35,7 @@
                                 Follow Streams with Tags
                             </div>
                             <div class="card-body">
-                                <table id="example" class="table table-striped table-bordered" style="width:100%">
+                                <table id="followed_tags" class="table table-striped table-bordered" style="width:100%">
                                     <thead>
                                     <tr>
                                         <th>Title</th>
@@ -82,9 +82,17 @@
                                 </table>
                             </div>
                         </div>
-
                 </div>
             </div>
         </div>
     </div>
+    @push('scripts')
+        <script>
+            $(document).ready(function() {
+                $('#top_1000, #top_100').DataTable( );
+                $('#streams_by_hr').DataTable();
+            } );
+        </script>
+
+    @endpush
 </x-app-layout>
