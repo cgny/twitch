@@ -20,6 +20,7 @@ class OAuthController extends Controller
 
         $scopes[] = 'channel:read:subscriptions';
         $scopes[] = 'channel:read:polls';
+        $scopes[] = 'channel:manage:broadcast';
         $scopes[] = 'analytics:read:extensions';
         $scopes[] = 'user:read:email';
         $scopes[] = 'user:read:follows';
@@ -43,7 +44,6 @@ class OAuthController extends Controller
 
     function access( Request $request )
     {
-        echo "<pre>";
         $code  = $request->input('code');
         $scope = $request->input('scope');
         $id    = auth()->user()->id;
