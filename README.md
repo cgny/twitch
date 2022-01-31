@@ -7,13 +7,16 @@ Overview
 <ul>
     <li>User Account            
         <ul>
-            <li>Authorize Twitch</li>
+            <li>Laravel Breeze</li>
+            <li>Laravel Passport</li>
+            <li>Create Account</li>
         </ul>
     </li>
     <li>OAuth
         <ul>
             <li>Twitch Access            
                 <ul>
+                    <li>Authorize Twitch</li>
                     <li>OAuthController::authorizeAccess()</li>
                     <li>OAuthController::access()</li>
                     <li>model Authentication</li>
