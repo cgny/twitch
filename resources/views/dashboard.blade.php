@@ -17,24 +17,29 @@
                         <div class="col-12" style="float:left">
                             <h5>Navigation</h5>
                         </div>
-                        <div  class="col-3" style="float:left">
+                        <div  class="col-2" style="float:left">
                             <a href="#top_1000" >
                                 Top 1000
                             </a>
                         </div>
-                        <div  class="col-3" style="float:left">
+                        <div  class="col-2" style="float:left">
                             <a href="#top_100"  >
                                 Top 100
                             </a>
                         </div>
-                            <div class="col-3" style="float:left">
-                                <a href="#streams_by_hr" >
+                        <div class="col-3" style="float:left">
+                            <a href="#streams_by_hr" >
                                 Streams By Start Time
                             </a>
                         </div>
-                            <div  class="col-3" style="float:left">
-                                <a href="#followed_tags" >
+                        <div  class="col-2" style="float:left">
+                            <a href="#followed_tags" >
                                 Follower Tags
+                            </a>
+                        </div>
+                        <div  class="col-3" style="float:left">
+                            <a href="#1000_shared_tags" >
+                                Shared Top 1000 Tags
                             </a>
                         </div>
                     </div>
@@ -43,7 +48,7 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="col-form-label-lg">
-                                Average Total Number of Viewers {{ $total_avg_viewers }}
+                                Average Total Number of Viewers: {{ number_format($total_avg_viewers,0) }}
                             </div>
                         </div>
                     </div>
@@ -70,7 +75,6 @@
                                     <th>Title</th>
                                     <th>Viewers</th>
                                     <th>Needed for 1000</th>
-                                    <th>Tags</th>
                                     <th>Shared Tags</th>
                                 </tr>
                                 </thead>
@@ -81,16 +85,6 @@
                                         <td>{{ $user_follow_datum['viewers'] }} </td>
                                         <td>{{ $user_follow_datum['needed_1000'] }} </td>
                                         <td>
-
-                                           @foreach($user_follow_datum['tags'] as $tags)
-
-                                              @foreach($tags as $tag)
-                                                    {{ $tag->localization_descriptions->{'en-us'} }}<br>
-                                                @endforeach
-                                           @endforeach
-                                        </td>
-                                        <td>
-
                                            @foreach($user_follow_datum['shared_tags'] as $tag)
                                                 {{ $tag->localization_descriptions->{'en-us'} }}<br>
                                            @endforeach
@@ -103,7 +97,6 @@
                                     <th>Title</th>
                                     <th>Viewers</th>
                                     <th>Needed for 1000</th>
-                                    <th>Tags</th>
                                     <th>Shared Tags</th>
                                 </tr>
                                 </tfoot>
@@ -117,13 +110,12 @@
                                 Top 1000 Shared Tags
                             </div>
                             <div class="card-body">
-                                <table id="followed_tags" class="table table-striped table-bordered" style="width:100%">
+                                <table id="top_1000_tags" class="table table-striped table-bordered" style="width:100%">
                                     <thead>
                                     <tr>
                                         <th>Title</th>
                                         <th>Viewers</th>
                                         <th>Needed for 1000</th>
-                                        <th>Tags</th>
                                         <th>Shared Tags</th>
                                     </tr>
                                     </thead>
@@ -134,17 +126,6 @@
                                             <td>{{ $user_follow_datum['viewers'] }} </td>
                                             <td>{{ $user_follow_datum['needed_1000'] }} </td>
                                             <td>
-
-                                                @foreach($user_follow_datum['tags'] as $tags)
-
-                                                    @foreach($tags as $tag)
-                                                        {{ $tag->tag_id }} |
-                                                        {{ $tag->localization_descriptions->{'en-us'} }}<br>
-                                                    @endforeach
-                                                @endforeach
-                                            </td>
-                                            <td>
-
                                                 @foreach($user_follow_datum['shared_tags'] as $tag)
 
                                                     {{ $tag->localization_descriptions->{'en-us'} }}<br>
@@ -158,7 +139,6 @@
                                         <th>Title</th>
                                         <th>Viewers</th>
                                         <th>Needed for 1000</th>
-                                        <th>Tags</th>
                                         <th>Shared Tags</th>
                                     </tr>
                                     </tfoot>
@@ -181,7 +161,7 @@
     @push('scripts')
         <script>
             $(document).ready(function() {
-                $('#top_1000, #top_100').DataTable( );
+                $('#top_1000, #top_100, #followed_tags, #top_1000_tags').DataTable( );
                 $('#streams_by_hr').DataTable();
             } );
         </script>

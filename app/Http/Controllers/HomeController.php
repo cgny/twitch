@@ -12,18 +12,32 @@ class HomeController extends Controller
     {
         $access = false;
         $this->validateToken();
+
         if ($this->getValidatedAccessToken())
         {
             $follows = (array) json_decode(auth()->user()->twitch_follows);
+            $tags = (array) json_decode(auth()->user()->twitch_tags);
 
-            $ts           = new TwitchStreams();
+            $ts              = new TwitchStreams();
+            $follows_flatten = [];
+            \App\Models\AbstractModel::flattenArray($follows, $follows_flatten);
+
             $game_streams = $ts->getViewersGroupedByGame(1000);
             foreach ($game_streams as $game_stream)
             {
                 $game_stream->following = "<button class='btn btn-warning' data-id='" . $game_stream->ts_channel_id . "'>No</button>";
-                if (in_array($game_stream->ts_channel_id, $follows))
+                if (in_array($game_stream->ts_channel_id, $follows_flatten))
                 {
                     $game_stream->following = "<button class='btn btn-success' data-id='" . $game_stream->ts_channel_id . "'>Yes</button>";
+                }
+
+                $steam_tags              = (array) json_decode($game_stream->ts_tags);
+                $shared                  = array_intersect($steam_tags, $tags);
+                $game_stream->share_tags = "<button class='btn btn-warning' data-id='" . $game_stream->ts_channel_id . "'>No</button>";
+                if (count($shared) > 0)
+                {
+                    $style                   = (in_array($game_stream->ts_channel_id, $follows_flatten)) ? 'success' : 'primary';
+                    $game_stream->share_tags = "<button class='btn btn-$style' data-id='" . $game_stream->ts_channel_id . "'>Yes</button>";
                 }
             }
             $top_100 = $game_streams->slice(0, 99);
@@ -31,8 +45,9 @@ class HomeController extends Controller
             $total_avg_viewers   = $ts->getAVGViews();
             $streamsByHour       = $ts->getStreamersByStartHour();
             $users_followed_data = $ts->getFollows($this->getValidatedAccessToken());
-            $users_1000_shared   = $ts->top1000tagsShared($this->getValidatedAccessToken());
-            $access              = true;
+            //sleep(3);
+            $users_1000_shared = $ts->top1000tagsShared($this->getValidatedAccessToken());
+            $access            = true;
         }
         else
         {
@@ -42,7 +57,7 @@ class HomeController extends Controller
 
         $data = [
             'total_avg_viewers'  => $total_avg_viewers,
-            'top_1000_keys'      => [ 'ts_channel_name', 'ts_game_id', 'ts_game_name', 'following', 'total_views' ],
+            'top_1000_keys'      => [ 'ts_channel_name', 'ts_game_id', 'ts_game_name', 'following', 'total_views', 'share_tags' ],
             'top_1000_data'      => $game_streams,
             'top_100_keys'       => [ 'ts_channel_name', 'ts_game_id', 'ts_game_name', 'total_views' ],
             'top_100_data'       => $top_100,

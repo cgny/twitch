@@ -118,8 +118,9 @@ class Twitch extends AbstractModel
                     }
                     else
                     {
-                        $ts->getUserFollows($user_id, $user_token->twitch_id, $user_token->access_token);
-                        $ts->getUserStreams($user_id, $user_token->twitch_id, $user_token->access_token);
+                        //too many requests need to comment out
+                        //$ts->getUserFollows($user_id, $user_token->twitch_id, $user_token->access_token);
+                        //$ts->getUserStreams($user_id, $user_token->twitch_id, $user_token->access_token);
                         if ($refresh_expires < time()) // refresh token expired
                         {
                             //refresh attempt

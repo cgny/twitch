@@ -12,18 +12,19 @@ use App\Models\Twitch;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\DB;
 
-class TwitchAPI{
+class TwitchAPI
+{
 
     private $config = [], $client, $access_token, $refresh_token, $scope, $expires_in = false, $all_params = [], $client_parameters;
 
-    function __construct($type = 'auth')
+    function __construct( $type = 'auth' )
     {
-        $this->config = config('twitch.'.$type);
+        $this->config = config('twitch.' . $type);
     }
 
-    function buildURL($base_url = true, $uri = 'authorize', $secret = false, $parameters = [], $scopes = [])
+    function buildURL( $base_url = true, $uri = 'authorize', $secret = false, $parameters = [], $scopes = [] )
     {
-        if($base_url)
+        if ($base_url)
         {
             $build_url = $this->config['base_url'];
         }
@@ -36,7 +37,7 @@ class TwitchAPI{
         $build_url .= $uri; //endpoint
         $build_url .= "?client_id=" . $client_id;
 
-        if($secret)
+        if ($secret)
         {
             $build_url .= "&client_secret=" . $this->config['client_secret'];
         }
@@ -46,21 +47,21 @@ class TwitchAPI{
             $build_url .= "&$p_name=" . $parameter;
         }
 
-        if($scopes)
+        if ($scopes)
         {
-            $build_url .= "&scope=" . implode(' ',$scopes);
+            $build_url .= "&scope=" . implode(' ', $scopes);
         }
         return $build_url;
     }
 
     private function client()
     {
-        $this->client =  new Client(array( 'base_uri' => $this->config['base_url'] ));
+        $this->client = new Client(array( 'base_uri' => $this->config['base_url'] ));
     }
 
     private function handleResponse( $response )
     {
-        $sc = $response->getStatusCode();
+        $sc   = $response->getStatusCode();
         $body = $this->parseJSON($response->getBody());
         //print_r( $body );
         if (isset($body->access_token))
@@ -96,24 +97,27 @@ class TwitchAPI{
                 break;
             case 400:
             case 500:
-                $msg    = urldecode(implode(", ", $ctstat));
+                $msg = urldecode(implode(", ", $ctstat));
                 //throw new \Exception("X-Ct-Status: " . $msg);
                 break;
         }
 
-        if($return)
+        if ($return)
         {
             return $body;
         }
 
         if (!empty($ctstat))
         {
-            throw new \Exception("Code : ". $sc . "X-Ct-Status: " . $msg);
+            throw new \Exception("Code : " . $sc . "X-Ct-Status: " . $msg);
         }
     }
 
-    function request( $method, $path, $params = array() , $function = '')
+    function request( $method, $path, $params = array(), $function = '' )
     {
+        $params['timeout']         = 30;
+        $params['connect_timeout'] = 30;
+
         $this->client();
         //print_r([ $method, $path, $params, '__FUNCTION__' => $function ]);
         $response = $this->client->request($method, $path, $params);
@@ -140,7 +144,7 @@ class TwitchAPI{
         return $this->refresh_token;
     }
 
-    function setScope($scope)
+    function setScope( $scope )
     {
         $this->scope = $scope;
     }

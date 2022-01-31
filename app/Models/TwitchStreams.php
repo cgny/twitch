@@ -40,7 +40,7 @@ class TwitchStreams extends AbstractModel
         'ts_game_id'           => '',
         'ts_game_name'         => '',
         'ts_number_of_viewers' => '',
-        'ts_tags' => '',
+        'ts_tags'              => '',
         'ts_start_date'        => 0,
         'created_at'           => '',
     ];
@@ -78,8 +78,8 @@ class TwitchStreams extends AbstractModel
                 $started->setTimezone(new \DateTimeZone('UTC'));
                 $started_date = $started->format('Y-m-d H:i:s');
 
-                $found_stream = TwitchStreams::where('ts_channel_id',$stream->id)->first();
-                if(isset($found_stream->ts_id))
+                $found_stream = TwitchStreams::where('ts_channel_id', $stream->id)->first();
+                if (isset($found_stream->ts_id))
                 {
                     $found_stream->ts_channel_id        = $stream->id;
                     $found_stream->ts_user_id           = $stream->user_id;
@@ -147,8 +147,8 @@ class TwitchStreams extends AbstractModel
                             $started->setTimezone(new \DateTimeZone('UTC'));
                             $started_date = $started->format('Y-m-d H:i:s');
 
-                            $found_stream = TwitchStreams::where('ts_channel_id',$stream->id)->first();
-                            if(isset($found_stream->ts_id))
+                            $found_stream = TwitchStreams::where('ts_channel_id', $stream->id)->first();
+                            if (isset($found_stream->ts_id))
                             {
                                 $found_stream->ts_channel_id        = $stream->id;
                                 $found_stream->ts_user_id           = $stream->user_id;
@@ -305,12 +305,19 @@ class TwitchStreams extends AbstractModel
             {
                 continue;
             }
-            //$shared_tags                                = array_intersect($follow->tag_ids, $user_tags);
+
+            $stream_tags = $follow->tag_ids;
+            $shared_tags = array_intersect($stream_tags, $user_tags);
+            if (count($shared_tags) == 0)
+            {
+                continue;
+            }
             $formatted_follow[$follow->id]['title']       = $follow->title;
             $formatted_follow[$follow->id]['needed_1000'] = ($follow->viewer_count < 1000) ? (1000 - $follow->viewer_count) : 0;
             $formatted_follow[$follow->id]['viewers']     = $follow->viewer_count;
-            $formatted_follow[$follow->id]['tags']        = $this->getTagsInfo($follow->tag_ids);
-            $formatted_follow[$follow->id]['shared_tags'] = $this->findSharedTags($user_tags, $formatted_follow[$follow->id]['tags']);
+            $formatted_follow[$follow->id]['tags']        = $this->getTagsInfo($shared_tags);
+            $formatted_follow[$follow->id]['shared_tags'] = $this->findSharedTags($shared_tags, $formatted_follow[$follow->id]['tags']);
+            sleep(2);
         }
         return $formatted_follow;
     }
@@ -325,15 +332,22 @@ class TwitchStreams extends AbstractModel
 
         //AbstractModel::flattenArray($twitch_follows, $sorted_streams);
 
+        $all_tags = [];
+
         foreach ($twitch_tags_array as $stream)
         {
-            //$shared_tags                                = array_intersect($follow->tag_ids, $user_tags);
+            $stream_tags = (array) json_decode($stream->ts_tags);
+            $shared_tags = array_intersect($stream_tags, $user_tags);
+            if (count($shared_tags) == 0)
+            {
+                continue;
+            }
             $formatted_follow[$stream->id]['title']       = $stream->ts_broadcast_name;
             $formatted_follow[$stream->id]['needed_1000'] = ($stream->ts_number_of_viewers < 1000) ? (1000 - $stream->ts_number_of_viewers) : 0;
             $formatted_follow[$stream->id]['viewers']     = $stream->ts_number_of_viewers;
-            $stream_tags                                  = (array) json_decode($stream->ts_tags);
-            $formatted_follow[$stream->id]['tags']        = $this->getTagsInfo($stream_tags);
-            $formatted_follow[$stream->id]['shared_tags'] = $this->findSharedTags($user_tags, $formatted_follow[$stream->id]['tags']);
+            $formatted_follow[$stream->id]['tags']        = $this->getTagsInfo($shared_tags);
+            $formatted_follow[$stream->id]['shared_tags'] = $this->findSharedTags($shared_tags, $formatted_follow[$stream->id]['tags']);
+            sleep(2);
         }
 
 
@@ -389,7 +403,7 @@ class TwitchStreams extends AbstractModel
 
     function getViewersGroupedByGame( $limit = '' )
     {
-        $s = self::selectRaw('ts_user_id,ts_channel_name,ts_channel_id,ts_game_id,ts_game_name, SUM(ts_number_of_viewers) as total_views')
+        $s = self::selectRaw('ts_tags,ts_user_id,ts_channel_name,ts_channel_id,ts_game_id,ts_game_name, SUM(ts_number_of_viewers) as total_views')
             ->groupBy([ 'ts_user_id', 'ts_channel_name', 'ts_channel_id', 'ts_game_id', 'ts_game_name' ])
             ->orderBy('total_views', 'desc');
 
@@ -403,11 +417,11 @@ class TwitchStreams extends AbstractModel
 
     function getSharedTagsFromStreams( $tags, $limit = '' )
     {
-        $where_tag = implode("%' OR ts_tags LIKE '%",$tags) ."%'";
+        $where_tag = implode("%' OR ts_tags LIKE '%", $tags) . "%'";
 
         $s = self::selectRaw('ts_tags,ts_user_id,ts_channel_name,ts_channel_id,ts_game_id,ts_game_name, SUM(ts_number_of_viewers) as total_views')
             ->whereRaw("( ts_tags LIKE '%$where_tag ) ")
-            ->groupBy([ 'ts_tags','ts_user_id', 'ts_channel_name', 'ts_channel_id', 'ts_game_id', 'ts_game_name' ])
+            ->groupBy([ 'ts_user_id', 'ts_channel_name', 'ts_channel_id', 'ts_game_id', 'ts_game_name' ])
             ->orderBy('total_views', 'desc');
 
         if ($limit)
