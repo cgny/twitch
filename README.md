@@ -36,8 +36,9 @@ Overview
     </li>
     <li>Cron Jobs
         <ul>
-            <li>Pull Streams</li>
-            <li>Refreshing Tokens</li>
+            <li>Laravel Scheduler | * * * * * cd /var/www/html/www.twitchtest.com && php artisan schedule:run >> /dev/null 2>&1</li>
+            <li>Pull Streams (every 15min)</li>
+            <li>Refreshing Tokens (every 5min)</li>
         </ul>
     </li>
     <li>Backend Queries
@@ -57,6 +58,11 @@ Overview
                 <ul>
                     <li>HomeController::index()</li>
                     <li>Bootstrap</li>
+                    <li>Top 1000</li>
+                    <li>Top 100</li>
+                    <li>Streams group by Start Hour</li>
+                    <li>Shared Tags from Followers</li>
+                    <li>Shared Tags from Top 1000</li>
                 </ul>
             </li> 
         </ul>
