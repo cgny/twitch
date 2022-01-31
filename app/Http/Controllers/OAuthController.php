@@ -25,6 +25,7 @@ class OAuthController extends Controller
         $scopes[] = 'analytics:read:extensions';
         $scopes[] = 'user:read:email';
         $scopes[] = 'user:read:follows';
+        $scopes[] = 'user:edit';
 
         $parameters = [
             'redirect_uri'  => route('auth.access'),
