@@ -13,23 +13,52 @@
 
                     @if($access == true)
 
-                    <div class="card">
-                        <div class="col-form-label-lg">
-                            Average Total Number of Viewers {{ $total_avg_viewers }}
+                    <div class="col-12" style="text-align: center;float:left;margin-bottom: 20px">
+                        <div class="col-12" style="float:left">
+                            <h5>Navigation</h5>
                         </div>
-                        <div class="card-body">
+                        <div  class="col-3" style="float:left">
+                            <a href="#top_1000" >
+                                Top 1000
+                            </a>
+                        </div>
+                        <div  class="col-3" style="float:left">
+                            <a href="#top_100"  >
+                                Top 100
+                            </a>
+                        </div>
+                            <div class="col-3" style="float:left">
+                                <a href="#streams_by_hr" >
+                                Streams By Start Time
+                            </a>
+                        </div>
+                            <div  class="col-3" style="float:left">
+                                <a href="#followed_tags" >
+                                Follower Tags
+                            </a>
+                        </div>
+                    </div>
 
+
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="col-form-label-lg">
+                                Average Total Number of Viewers {{ $total_avg_viewers }}
+                            </div>
                         </div>
                     </div>
 
                     <!-- Top 1000 Streams -->
+                    <a name="top_1000" />
                     @include('components.table',['title' => 'Top 1000  Streams', 'keys' => $top_1000_keys, 'dataSet' => $top_1000_data, 'chart_id' => 'top_1000'])
 
+                    <a name="top_100" />
                     @include('components.table',['title' => 'Top 100  Streams', 'keys' => $top_100_keys, 'dataSet' => $top_100_data, 'chart_id' => 'top_100'])
 
+                    <a name="streams_by_hr" />
                     @include('components.table',['title' => 'Streams By Start Hour', 'keys' => $streams_start_keys, 'dataSet' => $streams_start_data, 'chart_id' => 'streams_by_hr'])
 
-
+                    <a name="followed_tags" />
                     <div class="col-12 card">
                         <div class="col-form-label-lg">
                             Follow Streams with Tags
