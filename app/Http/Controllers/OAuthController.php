@@ -21,6 +21,7 @@ class OAuthController extends Controller
         $scopes[] = 'channel:read:subscriptions';
         $scopes[] = 'channel:read:polls';
         $scopes[] = 'channel:manage:broadcast';
+        $scopes[] = 'channel:manage:videos';
         $scopes[] = 'analytics:read:extensions';
         $scopes[] = 'user:read:email';
         $scopes[] = 'user:read:follows';
