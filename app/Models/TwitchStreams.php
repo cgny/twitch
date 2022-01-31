@@ -49,6 +49,8 @@ class TwitchStreams extends AbstractModel
 
     function loadStreams( $access_token = '' )
     {
+        $this->clearChannels();
+
         $parameters = [
             'first' => 100,
             'after' => ''
@@ -73,35 +75,18 @@ class TwitchStreams extends AbstractModel
                 $started->setTimezone(new \DateTimeZone('UTC'));
                 $started_date = $started->format('Y-m-d H:i:s');
 
-                $steam_found = TwitchStreams::where([ 'ts_channel_id' => $stream->id ])->first();
-                if (!empty($steam_found))
-                {
-                    $steam_found->ts_user_id           = $stream->user_id;
-                    $steam_found->ts_channel_name      = $stream->title;
-                    $steam_found->ts_broadcast_name    = $stream->user_name;
-                    $steam_found->ts_broadcast_login   = $stream->user_login;
-                    $steam_found->ts_game_id           = $stream->game_id;
-                    $steam_found->ts_game_name         = $stream->game_name;
-                    $steam_found->ts_number_of_viewers = $stream->viewer_count;
-                    $steam_found->ts_start_date        = $started_date;
-                    $steam_found->update();
-                    $counter++;
-                }
-                else
-                {
-                    $tstream                       = new TwitchStreams();
-                    $tstream->ts_channel_id        = $stream->id;
-                    $tstream->ts_user_id           = $stream->user_id;
-                    $tstream->ts_channel_name      = $stream->title;
-                    $tstream->ts_broadcast_name    = $stream->user_name;
-                    $tstream->ts_broadcast_login   = $stream->user_login;
-                    $tstream->ts_game_id           = $stream->game_id;
-                    $tstream->ts_game_name         = $stream->game_name;
-                    $tstream->ts_number_of_viewers = $stream->viewer_count;
-                    $tstream->ts_start_date        = $started_date;
-                    $tstream->save();
-                    $counter++;
-                }
+                $tstream                       = new TwitchStreams();
+                $tstream->ts_channel_id        = $stream->id;
+                $tstream->ts_user_id           = $stream->user_id;
+                $tstream->ts_channel_name      = $stream->title;
+                $tstream->ts_broadcast_name    = $stream->user_name;
+                $tstream->ts_broadcast_login   = $stream->user_login;
+                $tstream->ts_game_id           = $stream->game_id;
+                $tstream->ts_game_name         = $stream->game_name;
+                $tstream->ts_number_of_viewers = $stream->viewer_count;
+                $tstream->ts_start_date        = $started_date;
+                $tstream->save();
+                $counter++;
             }
             /*
 
@@ -140,35 +125,18 @@ class TwitchStreams extends AbstractModel
                             $started->setTimezone(new \DateTimeZone('UTC'));
                             $started_date = $started->format('Y-m-d H:i:s');
 
-                            $steam_found = TwitchStreams::where([ 'ts_channel_id' => $stream->id ])->first();
-                            if (!empty($steam_found))
-                            {
-                                $steam_found->ts_user_id           = $stream->user_id;
-                                $steam_found->ts_channel_name      = $stream->title;
-                                $steam_found->ts_broadcast_name    = $stream->user_name;
-                                $steam_found->ts_broadcast_login   = $stream->user_login;
-                                $steam_found->ts_game_id           = $stream->game_id;
-                                $steam_found->ts_game_name         = $stream->game_name;
-                                $steam_found->ts_number_of_viewers = $stream->viewer_count;
-                                $steam_found->ts_start_date        = $started_date;
-                                $steam_found->update();
-                                $counter++;
-                            }
-                            else
-                            {
-                                $tstream                       = new TwitchStreams();
-                                $tstream->ts_channel_id        = $stream->id;
-                                $tstream->ts_user_id           = $stream->user_id;
-                                $tstream->ts_channel_name      = $stream->title;
-                                $tstream->ts_broadcast_name    = $stream->user_name;
-                                $tstream->ts_broadcast_login   = $stream->user_login;
-                                $tstream->ts_game_id           = $stream->game_id;
-                                $tstream->ts_game_name         = $stream->game_name;
-                                $tstream->ts_number_of_viewers = $stream->viewer_count;
-                                $tstream->ts_start_date        = $started_date;
-                                $tstream->save();
-                                $counter++;
-                            }
+                            $tstream                       = new TwitchStreams();
+                            $tstream->ts_channel_id        = $stream->id;
+                            $tstream->ts_user_id           = $stream->user_id;
+                            $tstream->ts_channel_name      = $stream->title;
+                            $tstream->ts_broadcast_name    = $stream->user_name;
+                            $tstream->ts_broadcast_login   = $stream->user_login;
+                            $tstream->ts_game_id           = $stream->game_id;
+                            $tstream->ts_game_name         = $stream->game_name;
+                            $tstream->ts_number_of_viewers = $stream->viewer_count;
+                            $tstream->ts_start_date        = $started_date;
+                            $tstream->save();
+                            $counter++;
                         }
                     }
                     $x++;
