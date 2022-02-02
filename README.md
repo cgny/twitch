@@ -5,6 +5,12 @@ The assignment done from my understanding of what is asked.
 Overview
 
 <ul>
+    <li>Install Laravel
+        <ul>
+            <li>Run composer</li>
+            <li>Run artisan migrate</li>
+        </ul>
+    </li>
     <li>User Account            
         <ul>
             <li>Laravel Breeze</li>
